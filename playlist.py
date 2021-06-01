@@ -4,6 +4,8 @@ from googleapiclient.discovery import build
 from youtube_transcript_api import YouTubeTranscriptApi
 import key
 
+result = []
+
 def search_playlist_1(id,searchTerm):
 
     api_key = key.api_key()
@@ -14,7 +16,6 @@ def search_playlist_1(id,searchTerm):
     transcripts = dict()
 
     while True:
-
         playlistItemsRequest = youtube_service.playlistItems().list(part='contentDetails',
         playlistId=id,
         maxResults = 50,
@@ -24,38 +25,43 @@ def search_playlist_1(id,searchTerm):
         nextPageToken = playlistResult.get('nextPageToken')
 
         for item in playlistResult['items']:
-            # print(item['id'])
-        
-            # print(item['contentDetails']['videoId'])
+            
             videoNameRequest = youtube_service.videos().list(
             part="snippet",id=item['contentDetails']['videoId'])
             videoDetails = videoNameRequest.execute()
+
+            if ('error' in videoDetails.keys() or len(videoDetails.get('items')) == 0 ):
+                youtube_service.close()
+                return
             videoName = videoDetails['items'][0]['snippet']['title']
             try:
                 transcripts[videoName] = YouTubeTranscriptApi.get_transcript(item['contentDetails']['videoId'])
                 print(f'Found transcript for {videoName}')
+                result.append(f'Found transcript for {videoName}')
             except:
-                print(f'\nTranscript for video:"{videoName}" is disabled\n')
-                pass
+                print(f'Transcript for video:"{videoName}" is disabled')
+                result.append(f'Transcript for video:"{videoName}" is disabled')
+                
         if not nextPageToken:
             break
             
-        
-
-    #for title in transcripts: print(title)
     count = 0
     for title in transcripts:    
         for line  in transcripts[title]:
-            if(searchTerm in line['text']):
+            if(searchTerm.lower() in line['text'].lower()):
                 hours = int(line['start'])//(60*60)
                 minutes = (int(line['start'])//60)%60
                 seconds = int(line['start'])%60
                 print(f"\n{title}\n({hours}:{minutes}:{seconds})-> \"...{line['text']}...\"")
+                result.append(f"\n{title}\n({hours}:{minutes}:{seconds})-> \"...{line['text']}...\"")
                 count += 1
 
-    if count == 0 : print("No matches found :(\n")
+    if count == 0 : 
+        print("No matches found :(")
+        result.append("No matches found :(")
 
     youtube_service.close()
+    return result
 
 def loadingAnimation(process) :
     while process.is_alive():
@@ -70,3 +76,5 @@ def search_playlist(id,searchTerm):
 
     loadingAnimation(loading_process)
     loading_process.join()
+    
+    return result

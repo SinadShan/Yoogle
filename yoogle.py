@@ -1,6 +1,4 @@
 
-# Test Case 1: https://www.youtube.com/watch?v=WPjsDVS_trI
-# Test Case 2: https://www.youtube.com/watch?v=e_XQo4HixQQ&list=PLutdSTmJ7bALtCYBhJwP6E1ydBalwhHS1
 import re
 from video import search_video
 from playlist import search_playlist
@@ -17,7 +15,7 @@ def parse(url):
         else:
             return url[url.find('v=')+2:],0        
     elif '.be' in url:
-        return url[url.find('.be')+3:],0
+        return url[url.find('.be')+4:],0
     else:
         return None,None
 
@@ -26,11 +24,11 @@ def main(url,searchTerm = None):
     extracted_id,n = parse(url)
     if not extracted_id: 
         print("Invalid URL")
-        return None
+        return ['Invalid URL']
     if n == 1:
-        search_playlist(extracted_id,searchTerm)
+        return search_playlist(extracted_id,searchTerm)
     else:
-        search_video(extracted_id,searchTerm)
+        return search_video(extracted_id,searchTerm)
 
 url = input("Paste the url: ")
 searchTerm = input("Word/Sentence to be searched: ")
