@@ -22,6 +22,7 @@ pip install youtube-transcript-api
 def api_key():
     return 'YOUR-API-KEY-HERE' 
 ```
+* Run yoogle.py 
 
 * Copy paste the YouTube Playlist/Video link, type in the word/sentence you want to search, count to 10 and you'll get the ***appropriate*** result. If not, you probably counted too fast. Or there's an error in the program :(
 
