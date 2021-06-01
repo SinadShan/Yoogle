@@ -1,0 +1,9 @@
+
+
+# Test Case 1: https://www.youtube.com/watch?v=wMEq1mGpP5A (Normal video link)
+# Test Case 2: https://www.youtube.com/watch?v=QhOJnpmM488&list=PLPIPpC8AirzXtnbkWdw1s4i7-7v4rCCd8 (Playlist)
+# Test Case 3: https://youtu.be/aNNdVZ-mVy4 (Shared link)
+
+# Test Case 4: https://www.youtube.com/watch?v=dQw4w9WgXcQ  ( Transcripts disabled )
+# Test Case 5: https://www.youtube.com/watch?v=FasAw9Wgasf  ( No video/invalid link )
+# Test Case 6: https://www.youtube.com/AGjsVh   ( invalid URL )
